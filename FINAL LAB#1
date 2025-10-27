@@ -1,1 +1,128 @@
+// CODE FROM MAINACTIVITY.KT
+
+
+package com.example.mainactivity
+
+import android.os.Bundle
+import android.view.animation.AnimationUtils
+import android.widget.*
+import androidx.appcompat.app.AppCompatActivity
+
+class MainActivity : AppCompatActivity() {
+
+    private lateinit var imageSwitcher: ImageSwitcher
+    private var imageIndex = 0
+    private val images = intArrayOf(R.drawable.image1, R.drawable.image2)
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        // EXERCISE 1: Welcome Text
+        Toast.makeText(this, "Welcome to Android UI", Toast.LENGTH_SHORT).show()
+
+        // EXERCISE 3: AutoComplete and Spinner setup
+        val countries = listOf("Philippines", "Japan", "USA", "Canada", "Australia", "India")
+        val autoText = findViewById<AutoCompleteTextView?>(R.id.autoCountry)
+        autoText?.setAdapter(ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, countries))
+
+        val plans = listOf("Free", "Basic", "Standard", "Premium", "Enterprise")
+        val spinner = findViewById<Spinner?>(R.id.spinnerPlans)
+        spinner?.adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, plans)
+
+        // EXERCISE 4: Buttons
+        findViewById<Button?>(R.id.btnSwitchImage)?.setOnClickListener {
+            Toast.makeText(this, "Button clicked!", Toast.LENGTH_SHORT).show()
+        }
+
+        // EXERCISE 5: ImageSwitcher setup
+        imageSwitcher = findViewById(R.id.imageSwitcher)
+        imageSwitcher.setFactory {
+            val imageView = ImageView(this)
+            imageView.scaleType = ImageView.ScaleType.CENTER_CROP
+            imageView.layoutParams = FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.MATCH_PARENT,
+                FrameLayout.LayoutParams.MATCH_PARENT
+            )
+            imageView
+        }
+        imageSwitcher.inAnimation = AnimationUtils.loadAnimation(this, android.R.anim.fade_in)
+        imageSwitcher.outAnimation = AnimationUtils.loadAnimation(this, android.R.anim.fade_out)
+        imageSwitcher.setImageResource(images[imageIndex])
+
+        findViewById<Button?>(R.id.btnSwitchImage)?.setOnClickListener {
+            imageIndex = (imageIndex + 1) % images.size
+            imageSwitcher.setImageResource(images[imageIndex])
+        }
+    }
+}
+
+
+
+
+
+// CODE FROM activity_main.xml
+
+
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F9F9F9"
+    android:padding="20dp"
+    tools:context=".MainActivity">
+
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Image Switcher Demo"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        android:textColor="#333333"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="40dp" />
+
+    <ImageView
+        android:id="@+id/imageViewStatic"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:src="@drawable/image1"
+        android:contentDescription="Static image display"
+        app:layout_constraintTop_toBottomOf="@id/tvTitle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/image_border"
+        android:padding="5dp" />
+
+    <ImageSwitcher
+        android:id="@+id/imageSwitcher"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        app:layout_constraintTop_toBottomOf="@id/imageViewStatic"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/image_border" />
+
+    <Button
+        android:id="@+id/btnSwitchImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Switch Image"
+        android:textColor="#FFF"
+        android:backgroundTint="#2196F3"
+        app:layout_constraintTop_toBottomOf="@id/imageSwitcher"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="20dp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
 
